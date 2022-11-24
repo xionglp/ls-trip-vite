@@ -1,16 +1,18 @@
 <template>
   <div class="tabbar">
-    <template v-for="(item, index) in tabbarData" :key="item.path">
-      <div 
-        class="tabbar-item" 
-        :class="{active: currentIndex === index}"
-        @click="tabbarItemClick(index, item)"
-      >
-        <img v-if="currentIndex !== index" :src="getAssetsUrl(item.image)" alt="">
-        <img v-else :src="getAssetsUrl(item.imageActive)" alt="">
-        <span class="text">{{ item.text }}</span>
-      </div>
-    </template>
+    <van-tabbar v-model="currentIndex" active-color="#ff9854">
+      <template v-for="(item, index) in tabbarData" :key="item.path">
+        <van-tabbar-item :to="item.path">
+          <template #default>
+            <span>{{ item.text }}</span>
+          </template>
+          <template #icon>
+            <img v-if="currentIndex !== index" :src="getAssetsUrl(item.image)" alt="">
+            <img v-else :src="getAssetsUrl(item.imageActive)" alt="">
+          </template>
+        </van-tabbar-item>
+      </template>
+    </van-tabbar>
   </div>
 </template>
 
@@ -20,9 +22,9 @@
   import { ref } from "vue";
   import { useRouter } from "vue-router";
   
-
   const currentIndex = ref(0)
   const router = useRouter()
+
   function tabbarItemClick(index, item) {
     currentIndex.value = index
     router.push(item.path)
@@ -32,33 +34,16 @@
 
 <style lang="less" scoped>
   .tabbar {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 50px;
-    border-top: 1px solid #f3f3f3;
-    display: flex;
+    // 方法二: 局部定义一个变量，只针对.tab-bar子元素才生效
+    // --van-tabbar-item-icon-size: 30px;
 
-    .tabbar-item {
-      flex: 1;
-      justify-content: center;
-      align-items: center;
-      display: flex;
-      flex-direction: column;
+    // 方法三: 找到类，对类中的css属性进行重写
+    // :deep(.van-tabbar-item__icon) {
+    //   font-size: 35px;
+    // }
 
-      &.active {
-        color: var(--primary-color);
-      }
-
-      img {
-        width: 36px;
-      }
-
-      .text {
-        font-size: 12px;
-        margin-top: 2px;
-      }
+    img {
+      height: 28px;
     }
   }
 
