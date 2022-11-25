@@ -17,8 +17,8 @@
       </van-tabs>
     </div>
     <div class="content">
-      <template v-for="item in 100" :key="item">
-        <div>列表数据{{item}}</div>
+      <template v-for="(value, key) in allCities" :key="key">
+        <city-group v-show="tabActive === key" :group-data="value" />
       </template>
     </div>
 
@@ -30,6 +30,7 @@ import { useRouter } from 'vue-router';
 import { computed, ref } from 'vue';
 import useCityStore from "@/stores/modules/city"
 import { storeToRefs } from 'pinia';
+import cityGroup from './components/city-group.vue';
 
 const router = useRouter()
 
@@ -52,12 +53,15 @@ const cityStore = useCityStore()
 cityStore.fetchAllCitiesAction()
 const { allCities } = storeToRefs(cityStore)
 const currentGroup = computed(() => allCities.value[tabActive.value])
-
-
 </script>
 
 <style lang="less" scoped>
   .city {
+    .top {
+      position: relative;
+      z-index: 9;
+    }
+
     .content {
       height: calc(100vh - 98px);
       overflow-y: auto;
