@@ -3,8 +3,19 @@
 
   /* 全局修改: 任何地方只要用到-van-tabbar-item-icon-size都会被修改掉 */
   /* --van-tabbar-item-icon-size: 30px !important */
+
+  /* 全局修改搜索框左边图标颜色 */
+  --van-search-left-icon-color: var(--primary-color) !important;
 }
 
 body {
   font-size: 14px;
+}
+
+.full-page {
+  height: 100vh;
+  position: relative;
+  z-index: 9;
+  background-color: #fff;
+  overflow-y: auto;
 }
