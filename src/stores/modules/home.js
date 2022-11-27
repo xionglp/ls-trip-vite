@@ -17,6 +17,7 @@ const useHomeStore = defineStore("home", {
       const res = await getHomeCategories()
       this.categories = res.data
     },
+    // async 默认会返回一个Promise
     async fetchGetHomeHouseListAction() {
       const res = await getHomeHouseList(this.currentPage)
       this.houseLists.push(...res.data)

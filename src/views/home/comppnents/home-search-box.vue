@@ -14,14 +14,14 @@
       <div class="start">
         <div class="date">
           <span class="tip">入住</span>
-          <span class="time">{{ startDate }}</span>
+          <span class="time">{{ startDateStr }}</span>
         </div>
         <div class="stay">共{{ stayCount }}晚</div>
       </div>
       <div class="end">
         <div class="date">
           <span class="tip">离店</span>
-          <span class="time">{{ endDate }}</span>
+          <span class="time">{{ endDateStr }}</span>
         </div>
       </div>
     </div>
@@ -63,9 +63,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue"
+import { computed, ref } from "vue"
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router"
+import useMianStore from "@/stores/modules/main";
 import useCityStore from "@/stores/modules/city";
 import useHomeStore from "@/stores/modules/home";
 import { formatMonthDay, getDiffDays } from "@/utils/format_date"
@@ -94,24 +95,21 @@ const cityStore = useCityStore()
 const { currentCity } = storeToRefs(cityStore)
 
 // 日期范围处理
-const nowDate = new Date()
-const newDate = new Date()
-newDate.setDate(nowDate.getDate() + 2)
-
-const startDate = ref(formatMonthDay(nowDate))
-const endDate = ref(formatMonthDay(newDate))
-const stayCount = ref(getDiffDays(nowDate, newDate))
+const mainStore = useMianStore()
+const { startDate, endDate } = storeToRefs(mainStore)
+const startDateStr = computed(() => formatMonthDay(startDate.value))
+const endDateStr = computed(() => formatMonthDay(endDate.value))
+const stayCount = computed(() => getDiffDays(startDate.value, endDate.value))
 
 const showCalendar = ref(false)
 const onConfirm = (values) => {
   // 1.设置日期
   const selectStartDate = values[0]
   const selectEndDate = values[1]
-  startDate.value = formatMonthDay(selectStartDate)
-  endDate.value = formatMonthDay(selectEndDate)
+  mainStore.startDate = selectStartDate
+  mainStore.endDate = selectEndDate
   stayCount.value = getDiffDays(selectStartDate, selectEndDate)
   // 2.隐藏日历
-  console.log(selectStartDate, selectEndDate)
   showCalendar.value = false
 }
 
