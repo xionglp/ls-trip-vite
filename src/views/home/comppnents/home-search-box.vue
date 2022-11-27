@@ -1,6 +1,6 @@
 <template>
   <div class="search-box">
-    <!-- 位置信息 -->
+    <!-- 1.位置信息 -->
     <div class="location bottom-gray-line">
       <div class="city" @click="cityClick">{{ currentCity.cityName }}</div>
       <div class="position" @click="positionClick">
@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <!-- 日期范围 -->
+    <!-- 2.日期范围 -->
     <div class="section date-range bottom-gray-line" @click="showCalendar = true">
       <div class="start">
         <div class="date">
@@ -34,15 +34,15 @@
       @confirm="onConfirm" 
     />
 
-    <!-- 价格/人数选择 -->
+    <!-- 3.价格/人数选择 -->
     <div class="section price-counter bottom-gray-line">
       <div class="start">价格不限</div>
       <div class="end">人数不限</div>
     </div>
-    <!-- 关键字 -->
+    <!-- 4.关键字 -->
     <div class="section keyword bottom-gray-line">关键字/位置/民宿名</div>
 
-    <!-- 热门推荐 -->
+    <!-- 5.热门推荐 -->
     <div class="section hot-suggests">
       <template v-for="(item, index) in hotSuggests" :key="index">
         <div 
@@ -54,16 +54,21 @@
       </template>
     </div>
 
+    <!-- 6.搜索按钮 -->
+    <div class="section search-btn">
+      <div class="btn" @click="onSearchClick" >开始搜索</div>
+    </div>
+
   </div>
 </template>
 
 <script setup>
-import useCityStore from "@/stores/modules/city";
+import { ref } from "vue"
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router"
-import { ref } from "vue"
-import { formatMonthDay, getDiffDays } from "@/utils/format_date"
+import useCityStore from "@/stores/modules/city";
 import useHomeStore from "@/stores/modules/home";
+import { formatMonthDay, getDiffDays } from "@/utils/format_date"
 
 const router = useRouter()
 
@@ -112,6 +117,18 @@ const onConfirm = (values) => {
 
 const homeStore = useHomeStore()
 const { hotSuggests } = storeToRefs(homeStore)
+
+const onSearchClick = () => {
+  //跳转搜索页面，并且传递参数
+  router.push({
+    path: "/search",
+    query: {
+      startDate: startDate.value,
+      endDate: endDate.value,
+      currentCity: currentCity.value.cityName
+    }
+  })
+}
 
 </script>
 
@@ -208,6 +225,7 @@ const { hotSuggests } = storeToRefs(homeStore)
 
 .hot-suggests {
   margin: 10px 0;
+  height: auto;
 
   .item {
     padding: 4px 8px;
@@ -215,6 +233,21 @@ const { hotSuggests } = storeToRefs(homeStore)
     border-radius: 14px;
     font-size: 12px;
     line-height: 1;
+  }
+}
+
+.search-btn {
+  .btn {
+    width: 342px;
+    height: 38px;
+    max-height: 50px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 38px;
+    text-align: center;
+    border-radius: 20px;
+    color: #fff;
+    background-image: var(--theme-linear-gradient);
   }
 }
 </style>
