@@ -1,16 +1,20 @@
 <template>
   <div class="house-list">
     <h2 class="title">热门精选</h2>
-    <template v-for="item in houseLists" :key="item.data.houseId">
-      <h3 v-if="item.discoveryContentType === 9">type-9: {{ item.data.houseName }}</h3>
-      <h3 v-else-if="item.discoveryContentType === 3">type-3: {{ item.data.houseName }}</h3>
+    <div class="list">
+      <template v-for="item in houseLists" :key="item.data.houseId">
+      <house-item-full v-if="item.discoveryContentType === 9" :item-data="item.data"/>
+      <house-item-half v-else-if="item.discoveryContentType === 3" :item-data="item.data"/>
     </template>
+    </div>
   </div>
 </template>
 
 <script setup>
 import useHomeStore from '@/stores/modules/home';
 import { storeToRefs } from 'pinia';
+import HouseItemFull from "@/components/house-item-full/house-item-full.vue"
+import HouseItemHalf from "@/components/house-item-half/house-item-half.vue"
 
 const homeStore = useHomeStore()
 const { houseLists }  = storeToRefs(homeStore)
@@ -19,7 +23,12 @@ const { houseLists }  = storeToRefs(homeStore)
 
 <style lang="less" scoped>
 .house-list {
-  padding: 10px;
+  padding: 10px 8px;
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
   .title {
     font-size: 22px;
     padding: 10px;
