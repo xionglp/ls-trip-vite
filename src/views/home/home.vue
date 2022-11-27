@@ -9,15 +9,21 @@
 </template>
 
 <script setup>
-  import HomeNavbar from './comppnents/home-navbar.vue'
-  import HomeSearchBox from "./comppnents/home-search-box.vue"
+import useHomeStore from '@/stores/modules/home';
+import HomeNavbar from './comppnents/home-navbar.vue'
+import HomeSearchBox from "./comppnents/home-search-box.vue"
+
+// 组件化思想，分层架构，services、stores、views
+// 统一在最外层的父组件中请求
+const homeStore = useHomeStore()
+homeStore.fetchGetHomeSuggestsActions()
 
 </script>
 
 <style lang="less" scoped>
-  .home {
-    .banner img {
-      width: 100%;
-    }
+.home {
+  .banner img {
+    width: 100%;
   }
+}
 </style>
