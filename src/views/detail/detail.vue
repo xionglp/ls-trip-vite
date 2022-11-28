@@ -6,16 +6,16 @@
       left-arrow
       @click-left="onClickLeft"
     />
-    <detail-swipe />
+    <detail-swipe v-if="swipeData.length > 0"/>
     
   </div>
 </template>
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import useDetailStore from "@/stores/modules/detail"
-import { storeToRefs } from 'pinia';
+import useDetailStore from '@/stores/modules/detail';
 import DetailSwipe from "./components/detail-swipe.vue"
+import { storeToRefs } from 'pinia';
 
 const route = useRoute()
 const router = useRouter()
@@ -28,7 +28,6 @@ const onClickLeft = () => {
 const detailStore = useDetailStore()
 detailStore.fetchGetDetailInfoAction(route.params.id)
 const { swipeData } = storeToRefs(detailStore)
-
 
 </script>
 

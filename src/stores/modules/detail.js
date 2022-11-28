@@ -12,7 +12,7 @@ const useDetailStore = defineStore("detail", {
   actions: {
     async fetchGetDetailInfoAction(houseId) {
       const res = await getDetailInfo(houseId)
-      console.log(res.data)
+      console.log("请求成功",res.data)
       this.detailInfo = res.data
       this.swipeData = this.detailInfo.mainPart.topModule.housePicture.housePics
     }

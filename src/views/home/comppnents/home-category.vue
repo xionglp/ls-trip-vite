@@ -15,7 +15,6 @@ import { storeToRefs } from 'pinia';
 
 const homeStore = useHomeStore()
 const { categories } = storeToRefs(homeStore)
-
 </script>
 
 <style lang="less" scoped>
