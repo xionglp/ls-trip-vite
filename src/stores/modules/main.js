@@ -8,6 +8,7 @@ endDate.setDate(startDate.getDate() + 2)
 const useMianStore = defineStore("main", {
   state: () =>({
     token: "",
+    isLoading: false,
     startDate: startDate,
     endDate: endDate
   })
