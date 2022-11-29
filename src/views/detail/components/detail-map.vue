@@ -10,8 +10,20 @@
 import DetailSection from "@/components/detail-section/detail-section.vue"
 import useDetailStore from "@/stores/modules/detail";
 import { storeToRefs } from "pinia";
+import { onMounted, ref } from "vue";
+
+const mapRef = ref()
 const detailStore = useDetailStore()
 const { position } = storeToRefs(detailStore)
+
+// 百度地图的使用
+onMounted(() => {
+  var map = new BMapGL.Map(mapRef.value);             // 创建地图实例 
+  var point = new BMapGL.Point(position.value.longitude, position.value.latitude);  // 创建点坐标 
+  map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别
+  const maker = new BMapGL.Marker(point)
+  map.addOverlay(maker)
+})
 
 </script>
 
