@@ -44,7 +44,6 @@ for (const item of swipeData.value) {
   }
   valueArray.push(item)
 }
-console.log(swipeGroup)
 
 // 定义转换数据的方法
 const getName = (name) => {
