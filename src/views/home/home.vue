@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" ref="homeRef">
     <home-navbar></home-navbar>
     <home-banner></home-banner>
     <home-search-box></home-search-box>
@@ -11,8 +11,14 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "home"
+}
+</script>
+
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, onActivated, ref, watch } from 'vue';
 import useHomeStore from '@/stores/modules/home';
 import useScroll from "@/hooks/useScroll"
 import HomeNavbar from './comppnents/home-navbar.vue'
@@ -30,7 +36,8 @@ homeStore.fetchGetHomeCategoriesActions()
 homeStore.fetchGetHomeHouseListAction()
 
 // 监听滚动事件
-const { isReachBottom, scrollTop } = useScroll()
+const homeRef = ref()
+const { isReachBottom, scrollTop } = useScroll(homeRef)
 watch(isReachBottom, (newValue) => {
   if (newValue) {
     homeStore.fetchGetHomeHouseListAction().then(() => {
@@ -44,11 +51,20 @@ const isShowSearchbar =computed(() => {
   return scrollTop.value > 360
 })
 
+onActivated(() => {
+  homeRef.value.scrollTo({
+    top: scrollTop.value
+  })
+})
+
 </script>
 
 <style lang="less" scoped>
 .home {
+  height: 100vh;
+  overflow-y: auto;
   padding-bottom: 60px;
+  box-sizing: border-box;
 }
 
 .search-bar {

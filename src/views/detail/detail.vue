@@ -1,6 +1,7 @@
 <template>
   <div class="detail full-page" ref="detailRef">
-    <tab-control 
+    <tab-control
+      ref="tabControlRef" 
       class="tabs"
       v-if="isShowTabControl" 
       :titles="names" 
@@ -33,7 +34,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, watch, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import useDetailStore from '@/stores/modules/detail';
 import { storeToRefs } from 'pinia';
@@ -51,7 +52,7 @@ import DetailIntro from "./components/detail-intro.vue"
 
 const route = useRoute()
 const router = useRouter()
-console.log(route.params.id)
+// console.log(route.params.id)
 
 const onClickLeft = () => {
   router.back()
@@ -73,9 +74,14 @@ const names = computed(() => {
   return Object.keys(sectionEls.value)
 })
 const getSectionRef = (value) => {
+  if (!value) return
   const name = value.$el.getAttribute("name")
   sectionEls.value[name] = value.$el
 }
+
+// 点击tabs item
+let isClick = false
+let currentDistance = -1
 const onTabControlItemClick = (index) => {
   // 1.获取对应index的el元素
   const key = Object.keys(sectionEls.value)[index]
@@ -83,11 +89,41 @@ const onTabControlItemClick = (index) => {
   // 2.获取对应的滚动距离
   let instance = el.offsetTop
   if (index !== 0) instance = instance - 44
+
+  isClick = true
+  currentDistance = instance
+  console.log("currentDistance:", currentDistance)
+
   detailRef.value.scrollTo({
     top: instance,
     behavior: "smooth"
   })
 }
+
+// 页面滚动，匹配对应的tabControl的索引index
+const tabControlRef = ref()
+watch(scrollTop, (newValue) => {
+  // 如果是点击tab item方式， 就不用监听scrollTop， 手动设置tab item的索引
+  if (newValue === currentDistance) {
+    console.log(newValue)
+    isClick = false
+  }
+  if (isClick) return
+
+  // 1.获取所有区域的offsetTop
+  const els = Object.values(sectionEls.value)
+  const values = els.map(el => el.offsetTop)
+
+  // 2.根据newValue滚动的距离，匹配对应的索引
+  let currentIndex = values.length - 1
+  for(let i = 0; i < values.length; i++) {
+    if (values[i] > newValue + 44) {
+      currentIndex =  i - 1;
+      break
+    }
+  }
+  tabControlRef.value?.setCurrentIndex(currentIndex)
+})
 
 </script>
 

@@ -30,7 +30,6 @@ export default function useScroll(elRef) {
   
   onMounted(() => {
     if (elRef) el = elRef.value
-
     el.addEventListener("scroll", scrollListenerHandler)
   })
   

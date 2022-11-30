@@ -24,9 +24,17 @@ const emits = defineEmits(["itemClick"])
 const currentIndex = ref(0)
 const itemClick = (index) => {
   currentIndex.value = index
-  console.log(index)
   emits("itemClick", index)
 }
+
+const setCurrentIndex = (index) => {
+  console.log(index)
+  currentIndex.value = index
+}
+
+defineExpose({
+  setCurrentIndex
+})
 </script>
 
 <style lang="less" scoped>
